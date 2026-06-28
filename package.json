@@ -1,0 +1,30 @@
+{
+  "name": "hermes-mimo",
+  "version": "1.0.0",
+  "description": "MiMo Code skill for Hermes Agent — orchestrate Xiaomi's terminal-native AI coding assistant",
+  "main": "skills/mimo-code/SKILL.md",
+  "keywords": [
+    "hermes",
+    "mimo",
+    "xiaomi",
+    "ai-agent",
+    "coding-agent",
+    "skill",
+    "cli"
+  ],
+  "author": "larrymou",
+  "license": "MIT",
+  "homepage": "https://github.com/larrymou/hermes-mimo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larrymou/hermes-mimo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/larrymou/hermes-mimo/issues"
+  },
+  "files": [
+    "skills/",
+    "LICENSE",
+    "README.md"
+  ]
+}
