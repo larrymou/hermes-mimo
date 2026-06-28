@@ -452,3 +452,16 @@ terminal(command="git worktree remove /tmp/issue-78", workdir="~/project")
 8. **`--format json` shows raw events** — useful for debugging but adds output volume.
 9. **Session resumption requires same directory** — `-c` finds the most recent session for the current working directory.
 10. **Background tmux sessions persist** — always clean up with `tmux kill-session -t <name>` when done.
+
+## Verification
+
+Smoke test:
+
+```
+terminal(command="mimo run 'Respond with exactly: MIMO_SMOKE_OK'")
+```
+
+Success criteria:
+- Output includes `MIMO_SMOKE_OK`
+- Command exits without provider/model errors
+- For code tasks: expected files changed and tests pass

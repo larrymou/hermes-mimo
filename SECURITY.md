@@ -6,7 +6,7 @@ If you discover a security vulnerability in hermes-mimo, please report it respon
 
 **Do NOT open a public GitHub issue for security vulnerabilities.**
 
-Instead, please email: [your-email@example.com]
+Instead, please open a private security advisory on [GitHub](https://github.com/larrymou/hermes-mimo/security/advisories/new).
 
 Include:
 - Description of the vulnerability

@@ -51,7 +51,7 @@ terminal(command="mimo run 'Add tests for #102'", workdir="/tmp/issue-102", back
 
 | File | Description |
 |------|-------------|
-| `skills/mimo-code/SKILL.md` | Full orchestration guide (420+ lines) |
+| `skills/mimo-code/SKILL.md` | Full orchestration guide (450+ lines) |
 | `docs/compose/specs/2026-06-28-mimo-code-skill-design.md` | Design specification |
 | `tests/*.sh` | Test scripts for all orchestration patterns |
 
