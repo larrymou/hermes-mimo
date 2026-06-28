@@ -52,3 +52,6 @@ fi
 
 echo ""
 echo "=== All Print Mode Tests Passed ==="
+
+# Cleanup
+rm -rf /tmp/mimo-test

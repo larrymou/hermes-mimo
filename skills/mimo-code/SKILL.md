@@ -160,6 +160,7 @@ terminal(command="mimo run --agent plan 'Analyze the architecture of src/'", wor
 | `--session <id>` / `-s` | Resume a specific session |
 | `--agent <name>` | Choose agent (build, plan, compose) |
 | `--model provider/model` | Force specific model |
+| `--prompt <text>` | Provide initial prompt for TUI |
 | `--file <path>` / `-f` | Attach file(s) to the message |
 | `--dir <path>` | Set working directory |
 | `--title <name>` | Name the session |
@@ -168,6 +169,7 @@ terminal(command="mimo run --agent plan 'Analyze the architecture of src/'", wor
 | `--format json` | Raw JSON events output |
 | `--attach <url>` | Attach to a running mimocode server |
 | `--dangerously-skip-permissions` | Auto-approve permissions (dangerous) |
+| `--never-ask-questions` | Never prompt; pick best option autonomously |
 
 ## Persistent Memory
 
