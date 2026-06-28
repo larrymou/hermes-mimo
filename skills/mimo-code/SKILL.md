@@ -48,14 +48,24 @@ terminal(command="mimo run 'Add error handling to all API calls in src/' --model
 terminal(command="mimo run 'Review this config for security issues' -f config.yaml -f .env.example", workdir="/project", timeout=60)
 ```
 
-**Show model thinking:**
-```
-terminal(command="mimo run 'Debug why tests fail in CI' --format json", workdir="/project", timeout=120)
-```
-
 **Force a specific model:**
 ```
 terminal(command="mimo run 'Refactor auth module' --model openrouter/anthropic/claude-sonnet-4", workdir="/project", timeout=120)
+```
+
+**Set working directory with `--dir`:**
+```
+terminal(command="mimo run 'Fix the bug' --dir /path/to/project", timeout=60)
+```
+
+**Show model thinking:**
+```
+terminal(command="mimo run 'Debug why tests fail in CI' --thinking", workdir="/project", timeout=120)
+```
+
+**Set reasoning effort with `--variant`:**
+```
+terminal(command="mimo run 'Analyze this complex system' --variant high", workdir="/project", timeout=120)
 ```
 
 ### Mode 2: Interactive PTY via tmux — Multi-Turn Sessions
@@ -127,6 +137,9 @@ terminal(command="mimo run --agent plan 'Analyze the architecture of src/'", wor
 | Command | Purpose |
 |---------|---------|
 | `mimo session list` | List past sessions |
+| `mimo session delete <id>` | Delete a session |
+| `mimo export [sessionID]` | Export session data as JSON |
+| `mimo import <file>` | Import session data from JSON |
 | `mimo stats` | Token usage and costs |
 | `mimo stats --days 7` | Usage for specific period |
 
@@ -148,7 +161,13 @@ terminal(command="mimo run --agent plan 'Analyze the architecture of src/'", wor
 | `--agent <name>` | Choose agent (build, plan, compose) |
 | `--model provider/model` | Force specific model |
 | `--file <path>` / `-f` | Attach file(s) to the message |
+| `--dir <path>` | Set working directory |
 | `--title <name>` | Name the session |
+| `--thinking` | Show model thinking blocks |
+| `--variant <level>` | Reasoning effort (high, max, minimal) |
+| `--format json` | Raw JSON events output |
+| `--attach <url>` | Attach to a running mimocode server |
+| `--dangerously-skip-permissions` | Auto-approve permissions (dangerous) |
 
 ## Persistent Memory
 
@@ -167,10 +186,27 @@ MiMo Code maintains cross-session memory automatically. When a session resumes, 
 
 | Command | Purpose |
 |---------|---------|
+| `/goal` | Set a stopping condition — judge model evaluates completion |
 | `/dream` | Extract persistent knowledge from session traces |
 | `/distill` | Package repeated workflows into reusable skills |
 
 Memory is managed by the agent automatically. Don't manually edit memory files unless you're adding explicit project rules.
+
+### Subagent System
+
+The primary agent can create subagents on demand:
+
+- **Parallel execution** — subagents share session context and run concurrently
+- **Lifecycle tracking** — monitor subagent status and progress
+- **Cancellation** — stop subagents that are no longer needed
+- **Background execution** — subagents run independently of the main conversation
+
+### Session Export/Import
+
+```
+mimo export [sessionID]    # Export session data as JSON
+mimo import <file>         # Import session data from JSON file or URL
+```
 
 ## Compose Mode
 
@@ -266,13 +302,13 @@ Use separate workdirs or worktrees to avoid file collisions:
 
 ```
 # Task 1: Fix backend
-terminal(command="mimo run 'Fix the auth bug in src/auth.py'", workdir="/tmp/issue-101", background=true, pty=true)
+terminal(command="mimo run 'Fix the auth bug in src/auth.py'", workdir="/tmp/issue-101", background=true)
 
 # Task 2: Write tests
-terminal(command="mimo run 'Write integration tests for the API endpoints'", workdir="/tmp/issue-102", background=true, pty=true)
+terminal(command="mimo run 'Write integration tests for the API endpoints'", workdir="/tmp/issue-102", background=true)
 
 # Task 3: Update docs
-terminal(command="mimo run 'Update README.md with the new API endpoints'", workdir="/tmp/issue-103", background=true, pty=true)
+terminal(command="mimo run 'Update README.md with the new API endpoints'", workdir="/tmp/issue-103", background=true)
 
 # Monitor all
 process(action="list")
@@ -286,8 +322,8 @@ terminal(command="git worktree add -b fix/issue-78 /tmp/issue-78 main", workdir=
 terminal(command="git worktree add -b fix/issue-99 /tmp/issue-99 main", workdir="~/project")
 
 # Launch MiMo Code in each
-terminal(command="mimo run 'Fix issue #78: <description>. Commit when done.'", workdir="/tmp/issue-78", background=true, pty=true)
-terminal(command="mimo run 'Fix issue #99: <description>. Commit when done.'", workdir="/tmp/issue-99", background=true, pty=true)
+terminal(command="mimo run 'Fix issue #78: <description>. Commit when done.'", workdir="/tmp/issue-78", background=true)
+terminal(command="mimo run 'Fix issue #99: <description>. Commit when done.'", workdir="/tmp/issue-99", background=true)
 
 # After completion, push and create PRs
 terminal(command="cd /tmp/issue-78 && git push -u origin fix/issue-78")
@@ -385,6 +421,11 @@ terminal(command="git worktree remove /tmp/issue-78", workdir="~/project")
 1. Ensure you've switched to compose agent with `Tab`
 2. Skills are invoked naturally — just describe what you want
 3. Check `/help` for available commands
+
+### Goal not stopping
+1. Use `/goal` to set a clear stopping condition
+2. The judge model evaluates independently — be specific in your goal
+3. Check `/goal status` to see current goal state
 
 ### Changes not taking effect
 - **Config changes:** Restart the session

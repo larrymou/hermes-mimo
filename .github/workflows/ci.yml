@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          head -12 skills/mimo-code/SKILL.md | grep -q "^---$"
+          head -12 skills/mimo-code/SKILL.md | grep -q "name: mimo-code"
+          head -12 skills/mimo-code/SKILL.md | grep -q "version:"
+          echo "✓ SKILL.md frontmatter valid"
+
+      - name: Validate package.json
+        run: |
+          node -e "const p = require('./package.json'); if (!p.name || !p.version) throw new Error('Missing name or version')"
+          echo "✓ package.json valid"
+
+      - name: Check test scripts are executable
+        run: |
+          test -x tests/run-all-tests.sh
+          test -x tests/test-print-mode.sh
+          test -x tests/test-interactive-mode.sh
+          test -x tests/test-parallel-work.sh
+          echo "✓ All test scripts executable"
+
+      - name: Shellcheck test scripts
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: tests
+          severity: warning
