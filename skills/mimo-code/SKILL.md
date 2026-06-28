@@ -201,13 +201,6 @@ The primary agent can create subagents on demand:
 - **Cancellation** — stop subagents that are no longer needed
 - **Background execution** — subagents run independently of the main conversation
 
-### Session Export/Import
-
-```
-mimo export [sessionID]    # Export session data as JSON
-mimo import <file>         # Import session data from JSON file or URL
-```
-
 ## Compose Mode
 
 Compose mode provides structured workflows for specs-driven development. Switch to the compose agent with `Tab`, then invoke skills.
@@ -281,7 +274,7 @@ Voice can be configured in `.mimocode/mimocode.json`:
 ### Quick Review (Print Mode)
 
 ```
-terminal(command="cd /path/to/repo && git diff main...feature-branch | mimo run 'Review this diff for bugs, security issues, and style problems.' --agent plan", timeout=60)
+terminal(command="cd /path/to/repo && git diff main...feature-branch > /tmp/review.diff && mimo run 'Review this diff for bugs, security issues, and style problems.' -f /tmp/review.diff --agent plan", timeout=60)
 ```
 
 ### Built-in PR Command
